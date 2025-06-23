@@ -1,16 +1,17 @@
-# Small Korean VLM
+# Small Korean VLM Project!
 
 📢 2025년 1학기 [AIKU](https://github.com/AIKU-Official) 활동으로 진행한 프로젝트입니다.   
 🎉 2025년 1학기 AIKU Conference xx 수상!
 
+---
 ## 소개
 
 기존의 한국어 VLM들은 영어로 된 데이터셋을 한글로 번역한 데이터셋에 의존하여 성능이 좋지 않았습니다.    
-이에 다양한 한국어 데이터셋과 함께 고성능을 유지하면서도 경량화된 구조를 설계하여,
+이에 다양한 한국어 데이터셋과 함께 고성능을 유지하면서도 경량화된 구조를 설계하여,   
 한국어 성능 및 한국 문화 이해 특화된 small VLM을 구축하는 것을 목표로 하였습니다.   
 또한 이는 real time inference가 필요한 온디바이스 모델에 적합하므로 그 실용성까지 보인 프로젝트입니다.
 
-
+---
 ## 방법론
 
 - 한국어 및 한국 문화에 특화된 VLM이 부족한 상황 개선
@@ -19,6 +20,7 @@
 
 ### 모델링
 <img src="https://github.com/user-attachments/assets/5e5417b4-328d-451f-8756-b26fe2754513"  width="600" />   
+
 
 
 - **Image Encoder**: *clip-vit-large-patch14-336*
@@ -49,7 +51,6 @@
 
 
 ### **Stage 2 : Instruction Tuning**
-
 - Connection module 과 LLM LoRA를 활성화하여 학습하고 나머지는 얼립니다.
 - model이 image와 text 기반의 instruction을 따르도록 finetuning합니다
 - AdamW Optimizer
@@ -59,7 +60,9 @@
 - LoRA rank 64
 - alpha 16
 
-### 데이터셋
+
+
+### **Stage 별 데이터셋**
 stage 2 에서는 기존 LLaVA instruction tuning 데이터셋을 한국어 번역한 것을 사용할 뿐 아니라   
 직접 다양한 추가 fine-tuning 데이터셋을 구축하였습니다. 
 
@@ -74,52 +77,46 @@ stage 2 에서는 기존 LLaVA instruction tuning 데이터셋을 한국어 번�
 | [AIHub GQA 데이터](https://aihub.or.kr/aihubdata/data/view.do?dataSetSn=71711) | 한국어 기반 VQA(Visual Question Answering) |
 | [AIHub 외부지식 기반 멀티모달 QA](https://aihub.or.kr/aihubdata/data/view.do?dataSetSn=71357) | 문서 기반 시각 질의응답 데이터 |
 
+
+
 stage 2의 데이터셋 크기 비율은 다음과 같습니다:
 ![image](https://github.com/user-attachments/assets/995ddc73-d384-4426-b507-4220fcef9fd7)
 
+
+
 ### **Eval Metric**
-
 task 별로 팀원들이 벤치마크를 구축하여 모델 평가에 활용했습니다.
-
 
 | 카테고리 | 세부 벤치마크 / 태스크 | 관련 데이터셋 / 설명 | 평가 지표 (Eval Metric) |
 | :------------------- | :-------------------------- | :------------------------------------------- | :---------------------------------------------------- |
-| **한국어 VLM 벤치마크 (NCSOFT)** | 폐쇄형 벤치마크 | K-SEED, K-DTCBench, K-MMStar, K-MMBench | Accuracy |
+| **1. 한국어 VLM 벤치마크** | 폐쇄형 벤치마크 | K-SEED, K-DTCBench, K-MMStar, K-MMBench | Accuracy |
 | | 개방형 벤치마크 | K-LLaVA-WL | LLM 평가 (LLM Evaluation) |
-| |**추론 지연 시간 (Inference Latency)** | - | 초당 생성 토큰 개수 (token/s) |
-| **이미지 캡셔닝 (Image Captioning)** | 한국어 이미지 캡셔닝 | MS COCO 한국어 검증 세트 | **N-gram 기반:** METEOR, CIDEr <br> **임베딩 기반:** KR-SBERT를 이용한 Cosine Similarity |
-| **한국어 OCR** | 단순 한국어 OCR | - | IoU (Intersection over Union) |
+| **2. 추론 지연 시간 (Inference Latency)** |-| - | 초당 생성 토큰 개수 (token/s) |
+| **3. 이미지 캡셔닝 (Image Captioning)** | 한국어 이미지 캡셔닝 | MS COCO 한국어 검증 세트 | **N-gram 기반:** METEOR, CIDEr <br> **임베딩 기반:** KR-SBERT를 이용한 Cosine Similarity |
+| **4. 한국어 OCR** | 단순 한국어 OCR | - | IoU (Intersection over Union) |
 | | 복합 한국어 OCR (차트, 다이어그램, 그래프) | - | LLM 평가 (LLM Evaluation) |
-| **한국 문화 이해** | 전반적인 문화 이해 | - | Accuracy |
+| **5. 한국 문화 이해** | 전반적인 문화 이해 | - | Accuracy |
 
 
 ### **Benchmark Results**
-### **1. Korean VLM benchmarks from NCSOFT**
+<details>
+  <summary> 벤치마크 성능을 자세히 보려면 여기를 누르세요! </summary>
+    <h3> 1. Korean VLM benchmarks from NCSOFT </h3>
+    <img src="https://github.com/user-attachments/assets/6b66a7db-a926-4176-ba88-0074b2924beb" />   
+    <h3> 2. Inference Latency </h3>
+    <img src="https://github.com/user-attachments/assets/3468036b-5649-44d6-88a5-b3875149d72b" />   
+    <h3> 3. Image Captioning </h3>
+    <img src="https://github.com/user-attachments/assets/8b54c6e5-d59b-4222-a428-517e8feb5a56" width="700"/>   
+    <h3> 4.1. Korean OCR - simple Korean OCR </h3>
+    <img src="https://github.com/user-attachments/assets/42217c72-491e-44a8-98dd-e8a9c1936552" width="400"/>   
+    <h3> 4.2. Korean OCR - complex Korean OCR (chart, diagram, graph) </h3>
+    <img src="https://github.com/user-attachments/assets/b31c1b73-f279-40ab-b4a8-121d65cbef43" width="400"/>   
+    <h3> 5. Korean Culture </h3>
+    <img src="https://github.com/user-attachments/assets/f0c2cd3a-cb29-4ebb-8e8a-820d75646d83" width="400" />   
+    
+</details>
 
-![image.png](attachment:9a1da691-ca12-497b-8613-5f2a8da653ca:image.png)
-
-### **2. Inference Latency**
-
-![image.png](attachment:1abae221-c692-4e3a-a90c-b60615687b9a:image.png)
-
-### **3. Image Captioning**
-
-![image.png](attachment:7c0bf1a0-5575-43e4-98ac-9d0a28150d5e:image.png)
-
-### **4. Korean OCR**
-
-- **simple Korean OCR**
-
-![image.png](attachment:49ceb696-c5a3-43e0-b831-d8dcb220b7d5:image.png)
-
-- **complex Korean OCR (chart, diagram, graph)**
-
-![image.png](attachment:c991c687-415f-4fcf-aa89-8a73499d65be:image.png)
-
-### **5. Korean Culture**
-
-![image.png](attachment:d33cb2d9-f015-4c40-9d45-5b57169aeb58:image.png)
-
+---
 
 ## 환경 설정
 
@@ -140,15 +137,17 @@ python demo_local.py # huggingface 모델로 대체
 
 [Small Korean VLM 데모 링크!](https://c2832db5d94df7fdf0.gradio.live/)
 
+---
 ## 데모 사용 방법
 
 1. 질문하고 싶은 이미지를 업로드합니다
 2. 지시문을 명확하고 구체적으로 제시하면 원하는 답을 얻을 확률이 높아집니다.
-
+---
 ## 예시 결과 데모 동영상
 
 https://github.com/user-attachments/assets/a62062ca-39bb-4861-abe5-ecd238c5c9ec
 
+---
 ## 팀원 및 역할
 
 팀원분들 모두 고생하셨습니다!
